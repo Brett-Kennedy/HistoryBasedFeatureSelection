@@ -4,9 +4,11 @@
 
 HBFS is a feature selection tool. 
 
-Similar to genetic methods, wrapper methods, and some other approaches, it seeks to find the optimal subset of features for a model -- given a dataset, target, and performance metric. It is, in this way, different than methods such as filter methods, which seek instead to simply evaluate and rank each feature individually with respect to their predictive power, but do not attempt to find the best-performing subset of features. 
+Similar to genetic methods, wrapper methods, and some other approaches, it seeks to find the optimal subset of features for a model -- that is, the set of features that, given a dataset, target, and performance metric, provide the optimal value for that performance metric. 
 
-Given this, HBFS handles where the dataset may have feature interactions, making some features partially redundant, and where some features may be more predictive when in the presence of other features than without these. 
+It is, in this way, different than methods such as filter methods, which seek instead to simply evaluate and rank each feature individually with respect to their predictive power, but do not attempt to find the best-performing subset of features. 
+
+HBFS is an optimization technique, and executes by generating candidate solutions (subsets of the features), evaluating these, and learning over time from experience which features work well, which work well together, and which can be ineffective for the model. Given this, HBFS handles where the dataset may have feature interactions, making some features partially redundant, and where some features may be more predictive when in the presence of other features than without these. 
 
 
 ## Example
