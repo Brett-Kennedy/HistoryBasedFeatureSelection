@@ -2,9 +2,11 @@
 
 ## Introduction
 
-HBFS is a feature selection tool. Similar to wrapper methods, genetic methods, and some other approaches, HBFS seeks to find the optimal subset of features for a given dataset, target, and performance metric. 
+HBFS is a feature selection tool. 
 
-This is different than methods such as filter methods, which seek, instead, to evaluate and rank each feature with respect to their predictive power.
+Similar to genetic methods, wrapper methods, and some other approaches, it seeks to find the optimal subset of features for a model -- given a dataset, target, and performance metric. It is, in this way, different than methods such as filter methods, which seek instead to evaluate and rank each feature individually with respect to their predictive power, but do not attempt to find the best-performing subset of features. HBFS handles where the dataset may have feature interactions, making some features partially redundant, and some features more predictive in the presence of other features than without these. 
+
+
 
 ## Example
 An [example notebook](https://github.com/Brett-Kennedy/HistoryBasedFeatureSelection/blob/main/Demo/Demo_History_Feature_Selection.ipynb) is provided, which provides a few examples performing feature selection using HBFS. The following is a portion of the notebook. 
@@ -22,8 +24,8 @@ data = fetch_openml('credit-g', version=1, parser='auto')
 x = pd.DataFrame(data.data)
 y = data.target
 
-# Pre-process the data (skipped here, but inlcuded in the notebook).
-# This removes nulls and encodes categorical fields. 
+# Pre-process the data (this is skipped here, but included in the notebook).
+# This removes nulls and encodes categorical fields (which is necessary for some model types). 
 
 # Divide the data into train and validate sets
 n_samples = len(x) // 2
@@ -32,7 +34,7 @@ y_train = y[:n_samples]
 x_val = pd.DataFrame(x[n_samples:])
 y_val = y[n_samples:]
 
-# Execute feature_selection_history(). This returns a dataframe tha lists the feature
+# Execute feature_selection_history(). This returns a dataframe that lists the feature
 # sets that were tested and their scores on the validation set. 
 scores_df = feature_selection_history(
         model_dt, {},
@@ -81,7 +83,7 @@ The final output also includes a summary of the feature sets evaluated, sorted b
 ![plot1](https://github.com/Brett-Kennedy/HistoryBasedFeatureSelection/blob/main/images/output1.png)
 
 Interally, HBFS works by using a Random Forest regressor to estimate the metric score that would be given to any given set of features. HBFS selects the feature sets that are estimated to perform the best and evaluates these (training a model on the training data using these features, and evaluating it on the validation data). In this way, HBFS evaluates the feature sets most likely to perform well, but does this
-over several iterations, so that the Random Forest can become increasingly more skilled at estimating how well a given feature set would perform, based on the history of feature evaluated up until that iteration. 
+over several iterations, allowing the Random Forest to become increasingly more skilled at estimating how well a given feature set would perform, based on the history of feature evaluated up until that iteration. 
 
 To evaluate how well the Random Forest that's used internally was able to estimate the scores for random features sets, we plot the estimated versus actual scores for all feature sets that were actually evaluated:
 
@@ -93,11 +95,11 @@ We also provide some information about the progress (with respect to identifying
 
 ![plot1](https://github.com/Brett-Kennedy/HistoryBasedFeatureSelection/blob/main/images/output3.png)
 
-The top-left plot shos the range of scores of the candidates evaluated each iteration. In this example, the maximum value is steadily increasing, which is most relevant. 
+The top-left plot shows the range of scores of the candidates evaluated each iteration. In this example, the maximum value is steadily increasing, which is most relevant. 
 
 The top-right plot shows the scores given by the number of features for the feature sets that were evaluated. The maximum score is the most relevant for each number of features.
 
-The bottom-left plot shows the range of estimated scores by the number of features. We see that, for this dataset, everything else equal, the Random Forest estimates higher scores when using more features, but that there is a large range for each number of features, and that other factors are taken into consideration.
+The bottom-left plot shows the range of estimated scores by the number of features. We see that, for this dataset, everything else equal, the Random Forest estimates higher scores when using more features, but that there is a large range for each number of features (as would be expected), and that other factors are taken into consideration.
 
 The bottom-right plot shows that range of actual scores by the number of features, similar to the plot above it. 
 
@@ -105,7 +107,7 @@ The bottom-right plot shows that range of actual scores by the number of feature
 
 HBFS can support binary and multiclass classification, as well as regression. In this example, we have a regression target, and we use MAE as the metric, which is an example of a metric where lower is better (the previous example used f1_score, where higher is better). For this, we the parameter higher_is_better to False. 
 
-This calls feature_selection_history() twice. The first time it executes for just 2 iterations. The results from this are passed as a parameter in the 2nd call, which is able to continue from that point, executing an additional 10 iterations. 
+This calls feature_selection_history() twice, which demonstrates its ability to continue searching for optimal features given a previous history. The first time it executes for just 2 iterations. The results from this are passed as a parameter in the 2nd call, which is able to continue from that point, executing an additional 10 iterations. 
 
 ```python
 from sklearn.tree import DecisionTreeRegressor
