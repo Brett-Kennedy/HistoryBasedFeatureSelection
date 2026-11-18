@@ -10,11 +10,13 @@ It is, in this way, different than methods such as filter methods, which seek in
 
 HBFS is an optimization technique, and executes by generating candidate solutions (subsets of the features), evaluating these, and learning over time from experience which features work well, which work well together, and which can be ineffective for the model. Given this, HBFS handles where the dataset may have feature interactions, making some features partially redundant, and where some features may be more predictive when in the presence of other features than without these. 
 
+An introduction to HBFS is provided in: https://towardsdatascience.com/an-overview-of-feature-selection-1c50965551dd/ 
+
 
 ## Example
-An [example notebook](https://github.com/Brett-Kennedy/HistoryBasedFeatureSelection/blob/main/Demo/Demo_History_Feature_Selection.ipynb) is provided, which provides a few examples performing feature selection using HBFS. The following is a portion of the notebook. This identifies best-performing set of features when using a Decision Tree Classifier to create a predictive model using the 'auto' dataset from OpenML. An example later uses a more powerful predictive model, CatBoost. 
+An [example notebook](https://github.com/Brett-Kennedy/HistoryBasedFeatureSelection/blob/main/Demo/Demo_History_Feature_Selection.ipynb) is provided, which includes several examples performing feature selection using HBFS. The following is a portion of the notebook. This identifies the best-performing set of features when using a Decision Tree Classifier to create a predictive model for the 'auto' dataset from OpenML. A decision tree is used here for simplicity (an example later uses a more powerful predictive model, CatBoost), but a shallow decision tree may also be used where we wish to create an interpretable model.
 
-The method feature_selection_history() is the main function used by HBFS. In this call, we specify the model, the hyperparameters, the train and validation data, the budget for searching for an optimal set of features, the maximum number of features that can be returned, and some other parameters (described below). 
+feature_selection_history() is the main function used by HBFS. In this call, we specify the model, the hyperparameters, the train and validation data, the budget for searching for an optimal set of features, the maximum number of features that can be returned, and some other parameters (described below). 
 
 ```python
 import pandas as pd
