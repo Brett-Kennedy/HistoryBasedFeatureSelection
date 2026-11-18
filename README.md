@@ -12,7 +12,9 @@ HBFS is an optimization technique, and executes by generating candidate solution
 
 
 ## Example
-An [example notebook](https://github.com/Brett-Kennedy/HistoryBasedFeatureSelection/blob/main/Demo/Demo_History_Feature_Selection.ipynb) is provided, which provides a few examples performing feature selection using HBFS. The following is a portion of the notebook. 
+An [example notebook](https://github.com/Brett-Kennedy/HistoryBasedFeatureSelection/blob/main/Demo/Demo_History_Feature_Selection.ipynb) is provided, which provides a few examples performing feature selection using HBFS. The following is a portion of the notebook. This identifies best-performing set of features when using a Decision Tree Classifier to create a predictive model using the 'auto' dataset from OpenML. An example later uses a more powerful predictive model, CatBoost. 
+
+The method feature_selection_history() is the main function used by HBFS. In this call, we specify the model, the hyperparameters, the train and validation data, the budget for searching for an optimal set of features, the maximum number of features that can be returned, and some other parameters (described below). 
 
 ```python
 import pandas as pd
@@ -181,7 +183,7 @@ It's difficult to say how many iterations are necessary ahead of time (this depe
 
 ```python
 scores_df = feature_selection_history(
-    model_dt, {'cat_features': ['A']}, x_train, y_train, x_val, y_val,
+    model_cat, {'cat_features': ['A']}, x_train, y_train, x_val, y_val,
     num_iterations=10, num_estimates_per_iteration=5_000, num_trials_per_iteration=25,
     max_features=None, plot_evaluation=True, penalty=None,
     verbose=True, draw_plots=True, metric=mean_absolute_error, metric_args={}, higher_is_better=False,
